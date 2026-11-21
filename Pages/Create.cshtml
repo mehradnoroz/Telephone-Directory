@@ -1,0 +1,57 @@
+
+@page
+@model TelephoneDirectory.Pages.CreateModel
+
+<link rel="stylesheet" href="https://unpkg.com/@@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
+@{
+    ViewData["Title"] = "Create Contact";
+}
+
+<h1>Create New Contact</h1>
+
+<form method="post" enctype="multipart/form-data">
+
+    <div>
+        <label>Full Name</label>
+        <input type="text" asp-for="Contact.FullName" />
+        <span asp-validation-for="Contact.FullName"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label>Mobile Number</label>
+        <input type="text" asp-for="Contact.Mobile" maxlength="11" />
+        <span asp-validation-for="Contact.Mobile"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label>Birth Date</label>
+        <span asp-validation-for="ShamsiBirthDate"></span>
+        <input type="text" asp-for="ShamsiBirthDate" data-jdp placeholder="Select birth date" />
+    </div>
+
+    <br />
+
+    <div>
+        <label>Photo</label>
+        <input type="file" asp-for="UploadedPhoto" accept="image/*" />
+    </div>
+
+    <br />
+
+    <button type="submit">Save Contact</button>
+
+    <a asp-page="/Index">Back</a>
+
+</form>
+
+@section Scripts {
+    <script src="https://unpkg.com/@@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+
+    <script>
+        jalaliDatepicker.startWatch();
+    </script>
+}

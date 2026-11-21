@@ -1,0 +1,32 @@
+
+@page "{id:int}"
+@model TelephoneDirectory.Pages.DetailsModel
+
+@{
+    ViewData["Title"] = "Contact Details";
+}
+
+<h1>Contact Details</h1>
+
+@if (Model.Contact != null)
+{
+    <p><strong>ID:</strong> @Model.Contact.Id</p>
+
+    <p><strong>Full Name:</strong> @Model.Contact.FullName</p>
+
+    <p><strong>Mobile:</strong> @Model.Contact.Mobile</p>
+
+    <p><strong>Birth Date:</strong> @Model.ConvertToShamsiDate(Model.Contact.BirthDate)</p>
+
+    @if (Model.Contact.Photo != null)
+    {
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Contact.Photo)"
+             width="200" />
+    }
+
+    <br />
+    <a asp-page="/Edit" asp-route-id="@Model.Contact.Id">Edit Contact</a>
+    <a asp-page="/Delete" asp-route-id="@Model.Contact.Id">Delete Contact</a>
+
+    <a asp-page="/Index">Back to Contact List</a>
+}

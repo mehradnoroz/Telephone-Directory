@@ -1,0 +1,49 @@
+﻿
+@page
+@model TelephoneDirectory.Pages.IndexModel
+
+<h1>Contact List</h1>
+
+<a asp-page="/Create">Create New Contact</a>
+
+<form method="get">
+    <input type="text" name="searchText" value="@Model.SearchText" placeholder="Search by name or mobile" />
+    <button type="submit">Search</button>
+    <a asp-page="/Index">Clear</a>
+</form>
+
+<br />
+
+@if (Model.ContactList.Count == 0)
+{
+    <p>No contacts found.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name and Family Name</th>
+                <th>Phone Number</th>
+                <th>Date of Birth</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var contact in Model.ContactList)
+            {
+                <tr>
+                    <td>@contact.Id</td>
+                    <td>@contact.FullName</td>
+                    <td>@contact.Mobile</td>
+                    <td>@Model.ConvertToShamsiDate(contact.BirthDate)</td>
+                    <td>
+                        <a asp-page="/Details" asp-route-id="@contact.Id">View Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

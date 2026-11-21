@@ -1,0 +1,64 @@
+
+services:
+
+  app:
+    image: telephonedirectory:1.0.0
+    container_name: telephone-directory-app
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=TelephoneDirectory;User Id=sa;Password=${SA_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+    networks:
+      - telephone-network       
+
+
+  migration:
+    image: mcr.microsoft.com/dotnet/sdk:10.0
+    container_name: telephone-directory-migration
+    working_dir: /src
+    volumes:
+      - .:/src
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=TelephoneDirectory;User Id=sa;Password=${SA_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+    depends_on:
+      - db
+    networks:
+      - telephone-network  
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        dotnet tool install --global dotnet-ef --version 10.0.15 &&
+        export PATH="$$PATH:/root/.dotnet/tools" &&
+        dotnet restore &&
+        for i in $$(seq 1 60); do
+          if (echo > /dev/tcp/db/1433) >/dev/null 2>&1; then
+            echo "Database server is ready";
+            break;
+          fi;
+          sleep 2;
+        done &&
+        dotnet ef database update --connection "$$ConnectionStrings__DefaultConnection"
+    restart: "no"
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: telephone-directory-db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - telephone-network  
+
+volumes:
+  sqlserver_data:
+networks:
+  telephone-network:
+    driver: bridge

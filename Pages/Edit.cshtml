@@ -1,0 +1,48 @@
+
+@page "{id:int}"
+@model TelephoneDirectory.Pages.EditModel
+
+@{
+    ViewData["Title"] = "Edit Contact";
+}
+
+<h1>Edit Contact</h1>
+
+<form method="post" enctype="multipart/form-data">
+
+    <div>
+        <label>Full Name</label>
+        <input type="text" asp-for="Contact.FullName" />
+        <span asp-validation-for="Contact.FullName"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label>Mobile Number</label>
+        <input type="text" asp-for="Contact.Mobile" maxlength="11" />
+        <span asp-validation-for="Contact.Mobile"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label>Birth Date</label>
+        <input type="text" asp-for="ShamsiBirthDate" data-jdp placeholder="Select birth date" />
+        <span asp-validation-for="ShamsiBirthDate"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label>New Photo</label>
+        <input type="file" asp-for="UploadedPhoto" accept="image/*" />
+    </div>
+
+    <br />
+
+    <button type="submit">Save Changes</button>
+
+    <a asp-page="/Index">Back</a>
+
+</form>
